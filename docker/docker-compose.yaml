@@ -2,8 +2,8 @@ services:
     dev_env:
         container_name: dev_env
         build:
-          context: .
-          dockerfile: Dockerfile.dev_env
+          context: ..
+          dockerfile: docker/Dockerfile.dev_env
         ports:
           - "22022:22"      # SSH
           - "8888:8888"     # Jupyter
@@ -11,10 +11,10 @@ services:
           - "4041:4041"
           - "4042:4042"
         volumes:
-          - ../workspace:/workspace
+          - ..:/project
+        working_dir: /project/workspace/sp500
         env_file:
           - ../.env
-
 
     minio:
         container_name: minio
@@ -57,7 +57,7 @@ services:
         ports:
             - "27017:27017"
                                     
-      postgres:
+    postgres:
         container_name: postgres
         image: postgres:15
         environment:
@@ -67,7 +67,7 @@ services:
         ports:
           - "5432:5432"
 
-      airflow-init:
+    airflow-init:
         image: apache/airflow:2.8.1
         container_name: airflow_init
         depends_on:
@@ -96,7 +96,7 @@ services:
             )
         restart: on-failure
 
-      airflow-webserver:
+    airflow-webserver:
         image: apache/airflow:2.8.1
         container_name: airflow_webserver
         depends_on:
@@ -114,7 +114,7 @@ services:
         command: airflow webserver
         restart: always
 
-      airflow-scheduler:
+    airflow-scheduler:
         image: apache/airflow:2.8.1
         container_name: airflow_scheduler
         depends_on:
