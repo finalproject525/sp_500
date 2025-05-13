@@ -1,0 +1,47 @@
+FROM ubuntu:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV SPARK_VERSION=3.4.1
+ENV HADOOP_VERSION=3
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV SPARK_HOME=/opt/spark
+ENV PATH="$SPARK_HOME/bin:$PATH"
+
+# Update system and install required packages
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-venv \
+    openjdk-11-jdk \
+    curl \
+    git \
+    wget \
+    ssh \
+    sudo \
+    vim \
+    && apt-get clean
+
+# Install Apache Spark
+RUN mkdir -p /opt && \
+    wget https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+    tar xvf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz -C /opt && \
+    mv /opt/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} /opt/spark && \
+    rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
+
+
+# Create working directory with full permissions
+RUN mkdir -p /workspace && chmod 777 /workspace
+
+# Configure SSH access
+RUN mkdir -p /var/run/sshd && \
+    echo 'root:root' | chpasswd && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# Expose ports for SSH, Jupyter, and Spark UI
+EXPOSE 22 8888 4040 4041 4042
+
+# Set working directory
+WORKDIR /workspace
+
+# Default command
+CMD ["/usr/sbin/sshd", "-D"]
