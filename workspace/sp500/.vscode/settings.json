@@ -1,0 +1,5 @@
+{
+  "python.defaultInterpreterPath": "/project/workspace/sp500/.env_sp500/bin/python",
+  "python.terminal.activateEnvironment": true,
+  "python.terminal.executeInFileDir": true
+}
