@@ -7,10 +7,6 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 ENV SPARK_HOME=/opt/spark
 ENV PATH="$SPARK_HOME/bin:$PATH"
 
-# Define your project Git repo and name
-ENV PROJECT_NAME=sp500
-ENV GIT_REPO=https://github.com/raphael2/sp500.git
-
 # Update system and install required packages
 RUN apt-get update && apt-get install -y \
     python3 \
@@ -32,19 +28,9 @@ RUN mkdir -p /opt && \
     mv /opt/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} /opt/spark && \
     rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 
-# Create workspace directory
+
+# Create working directory with full permissions
 RUN mkdir -p /workspace && chmod 777 /workspace
-WORKDIR /workspace
-
-# Clone project repository
-RUN git clone $GIT_REPO $PROJECT_NAME
-
-# Create virtual environment and install dependencies
-RUN python3 -m venv /workspace/$PROJECT_NAME/.venv && \
-    /workspace/$PROJECT_NAME/.venv/bin/pip install --upgrade pip && \
-    if [ -f /workspace/$PROJECT_NAME/requirements.txt ]; then \
-        /workspace/$PROJECT_NAME/.venv/bin/pip install -r /workspace/$PROJECT_NAME/requirements.txt; \
-    fi
 
 # Configure SSH access
 RUN mkdir -p /var/run/sshd && \
@@ -54,8 +40,8 @@ RUN mkdir -p /var/run/sshd && \
 # Expose ports for SSH, Jupyter, and Spark UI
 EXPOSE 22 8888 4040 4041 4042
 
-# Set final working directory to project
-WORKDIR /workspace/$PROJECT_NAME
+# Set working directory
+WORKDIR /workspace
 
 # Default command
 CMD ["/usr/sbin/sshd", "-D"]
