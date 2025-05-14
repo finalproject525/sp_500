@@ -33,6 +33,14 @@ RUN wget https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SP
 ENV SPARK_HOME=/opt/spark
 ENV PATH=$PATH:$SPARK_HOME/bin
 
+RUN echo 'export SPARK_HOME=/opt/spark' >> /root/.bashrc && \
+    echo 'export PATH=$PATH:$SPARK_HOME/bin' >> /root/.bashrc && \
+    echo 'if [ -f /project/.env ]; then' >> /root/.bashrc && \
+    echo '  export $(grep -v "^#" /project/.env | xargs)' >> /root/.bashrc && \
+    echo 'fi' >> /root/.bashrc && \
+    echo 'source /project/workspace/sp500/.env_sp500/bin/activate' >> /root/.bashrc
+
+
 # -------------------------------
 # Default command: SSH daemon
 # -------------------------------
