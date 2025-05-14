@@ -48,3 +48,24 @@ class S3Uploader:
         except (BotoCoreError, ClientError) as e:
             print(f"❌ JSON upload failed: {e}")
             raise
+
+
+
+
+
+            
+
+class LocalUploader:
+    def __init__(self, output_dir="output_data"):
+        self.output_dir = output_dir
+        os.makedirs(self.output_dir, exist_ok=True)
+
+    def upload_json(self, messages, prefix="local-data"):
+        timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%S")
+        filename = f"{prefix}_{timestamp}.json"
+        path = os.path.join(self.output_dir, filename)
+
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(messages, f, indent=2)
+
+        print(f"📁 Written batch to {path}") 

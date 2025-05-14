@@ -1,8 +1,8 @@
 import json
 import time
 from kafka import KafkaConsumer
-from services.aws.S3Uploader import S3Uploader
-from config import AWS_S3_BUCKET
+from services.aws.S3Uploader import S3Uploader,LocalUploader
+from config import AWS_S3_BUCKET,SAVE_LOCAL
 
 
 class KafkaBatchConsumer:
@@ -26,7 +26,12 @@ class KafkaBatchConsumer:
         )
 
     def _handle_batch(self, messages):
-        uploader = S3Uploader(bucket_name=AWS_S3_BUCKET)
+        if SAVE_LOCAL == False:
+            uploader = S3Uploader(bucket_name=AWS_S3_BUCKET)
+            
+        else :
+            uploader = LocalUploader(output_dir="test_output")
+
         uploader.upload_json(messages, prefix="yfinance-data")
 
     def consume(self):
@@ -70,3 +75,8 @@ class KafkaBatchConsumer:
             if buffer:
                 print(f"📤 Final flush of {len(buffer)} remaining messages")
                 self._handle_batch(buffer)
+
+
+
+
+

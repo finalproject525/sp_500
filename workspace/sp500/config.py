@@ -8,8 +8,8 @@ SYMBOLS_TEST = ["AAPL", "MSFT", "GOOG","TSLA","NVDA","META","AMZN"]
 
 
 ################ yfinance api config#############################
-PERIOD = "1d"
-INTERVAL = "1m" 
+PERIOD = "730d"
+INTERVAL = "60m" 
 
 
 
@@ -20,6 +20,8 @@ BATCH_SIZE = 100
 
 
 ################### AWS #########################################
+
+SAVE_LOCAL = False
 AWS_S3_BUCKET = "final-de-project-sp500"
 
 
