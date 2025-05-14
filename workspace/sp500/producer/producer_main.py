@@ -1,10 +1,9 @@
 
 
-from finance.functions import get_sp500_symbol
-from finance.YahooFinance import YahooBatchFinanceClient  
+from ..finance.functions import get_sp500_symbol
+from ..finance.YahooFinance import YahooBatchFinanceClient  
 from config import TEST,SYMBOLS_TEST,BROKER,TOPIC,PERIOD,INTERVAL
-from producer.kafka_producer import create_producer,send_messages
-import json
+from producer.kafka_producer import create_producer,send_messages 
 
 if __name__ == "__main__":
 
