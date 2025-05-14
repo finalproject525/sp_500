@@ -2,20 +2,16 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json
 from pyspark.sql.types import StructType, StringType
 from services.aws.S3Uploader import S3Uploader
-import pandas as pd
-import time
 from config import USE_DYNAMIC_GROUP
-import os
 
 class SparkKafkaConsumer:
-    def __init__(self, kafka_bootstrap_servers, topic, s3_bucket, json_prefix="json", parquet_prefix="parquet", group_id=None):
+    def __init__(self, kafka_bootstrap_servers, topic, s3_bucket, json_prefix="json", parquet_prefix="parquet"):
         self.kafka_bootstrap_servers = kafka_bootstrap_servers
         self.topic = topic
         self.s3_bucket = s3_bucket
         self.json_prefix = json_prefix
         self.parquet_prefix = parquet_prefix
         self.spark = self._create_spark_session()
-        self.group_id = f"yfinance-dev-{int(time.time())}" if USE_DYNAMIC_GROUP else "yfinance-group"
         self.uploader = S3Uploader(bucket_name=self.s3_bucket)
 
     def _create_spark_session(self):
@@ -97,7 +93,6 @@ class SparkKafkaConsumer:
         query = df.writeStream \
             .foreachBatch(self._write_batch_to_s3) \
             .outputMode("append") \
-            .option("kafka.group.id", self.group_id)\
             .start()
 
         query.awaitTermination()

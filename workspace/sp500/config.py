@@ -8,7 +8,7 @@ SYMBOLS_TEST = ["AAPL", "MSFT", "GOOG","TSLA","NVDA","META","AMZN"]
 
 
 ################ yfinance api config#############################
-PERIOD = "730d"
+PERIOD = "365d"
 INTERVAL = "60m" 
 
 
