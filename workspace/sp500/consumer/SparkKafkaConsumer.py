@@ -60,6 +60,8 @@ class SparkKafkaConsumer:
         print(f"📤 Sending batch {batch_id} to S3")
         self.uploader.upload_json(records, prefix=self.json_prefix)
         self.uploader.upload_dataframe_as_parquet(pd_df, s3_key=self._make_parquet_key(batch_id))
+
+        
     def _write_batch_to_s3(self, batch_df, batch_id):
     # Vérifie si le batch est vide
         if batch_df.rdd.isEmpty():
@@ -81,7 +83,8 @@ class SparkKafkaConsumer:
         # Upload vers S3 : JSON + Parquet
         self.uploader.upload_json(records, prefix=self.json_prefix)
         self.uploader.upload_dataframe_as_parquet(
-            pd_df, s3_key=self._make_parquet_key(batch_id)
+            pd_df,
+            prefix=self.parquet_prefix
         )
 
 

@@ -1,5 +1,5 @@
 from finance.functions import get_sp500_symbol
-TEST = False
+TEST = True
 
 SYMBOLS_TEST = ["AAPL", "MSFT", "GOOG","TSLA","NVDA","META","AMZN"]
 

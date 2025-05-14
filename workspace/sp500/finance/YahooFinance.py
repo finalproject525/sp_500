@@ -5,18 +5,6 @@ import yfinance as yf
 from typing import List, Dict
 from datetime import datetime
 
-
-
-class YahooFinanceClientByTicker:
-    def __init__(self, symbol: str):
-        self.symbol = symbol.upper()
-        self.ticker = yf.Ticker(self.symbol)
-
-    def get_stock_history(self, period: str = '1d', interval: str = '60m') -> pd.DataFrame:
-        """
-            [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]
-        """
-        return self.ticker.history(period=period, interval=interval)
     
 class YahooBatchFinanceClient:
     def __init__(self,symbols: List[str], period: str = '1d', interval: str = '1m', batch_size: int = 2):
