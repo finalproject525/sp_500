@@ -32,3 +32,5 @@ python-dotenv==1.1.0
 yfinance==0.2.59              
 lxml==5.2.1
 pyspark==3.5.5
+setuptools==80.4.0
+pyarrow==20.0.0

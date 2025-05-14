@@ -1,5 +1,5 @@
 from finance.functions import get_sp500_symbol
-TEST = True
+TEST = False
 
 SYMBOLS_TEST = ["AAPL", "MSFT", "GOOG","TSLA","NVDA","META","AMZN"]
 
@@ -17,7 +17,7 @@ INTERVAL = "60m"
 TOPIC = 'yfinance-data'
 BROKER = ['course-kafka:9092']
 BATCH_SIZE = 100
-
+USE_DYNAMIC_GROUP = False
 
 ################### AWS #########################################
 

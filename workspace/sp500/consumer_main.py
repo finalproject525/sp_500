@@ -1,15 +1,12 @@
-from config import BROKER, TOPIC, BATCH_SIZE
-from consumer.kafka_consumer import KafkaBatchConsumer
-
-def main():
-    consumer = KafkaBatchConsumer(
-        brokers=BROKER,
-        topic=TOPIC,
-        batch_size=BATCH_SIZE,
-        flush_interval=10,
-        idle_timeout=20
-    )
-    consumer.consume()
+from consumer.SparkKafkaConsumer import SparkKafkaConsumer
+from config import AWS_S3_BUCKET, BROKER, TOPIC
 
 if __name__ == "__main__":
-    main()
+    consumer = SparkKafkaConsumer(
+        kafka_bootstrap_servers=BROKER[0],
+        topic=TOPIC,
+        s3_bucket=AWS_S3_BUCKET,
+        json_prefix="json",
+        parquet_prefix="parquet"
+    )
+    consumer.start()

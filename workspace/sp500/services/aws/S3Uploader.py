@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 from botocore.exceptions import BotoCoreError, ClientError
 from dotenv import load_dotenv
+from io import BytesIO
 
 class S3Uploader:
     def __init__(self, bucket_name: str):
@@ -49,11 +50,32 @@ class S3Uploader:
             print(f"❌ JSON upload failed: {e}")
             raise
 
+    def upload_dataframe_as_parquet(self, df: pd.DataFrame, prefix: str = "kafka"):
+        try:
+            now = datetime.utcnow()
+            timestamp = now.strftime("%Y-%m-%dT%H-%M-%S")
+            date_path = now.strftime("%Y/%m/%d/%H")
+
+            key = f"{prefix}/{date_path}/data_{timestamp}.parquet"
+
+            buffer = BytesIO()
+            df.to_parquet(buffer, index=False, engine='pyarrow')
+            buffer.seek(0)
+
+            self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Key=key,
+                Body=buffer.getvalue()
+            )
+
+            print(f"✅ Parquet upload successful: s3://{self.bucket_name}/{key}")
+        except (BotoCoreError, ClientError) as e:
+            print(f"❌ Parquet upload failed: {e}")
+            raise
 
 
 
-
-            
+                
 
 class LocalUploader:
     def __init__(self, output_dir="output_data"):
