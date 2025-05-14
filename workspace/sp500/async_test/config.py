@@ -8,9 +8,11 @@ SYMBOLS_TEST = ["AAPL", "MSFT", "GOOG","TSLA","NVDA","META","AMZN"]
 
 
 ################ yfinance api config#############################
-PERIOD = "1d"
+PERIOD = "8d"
 INTERVAL = "60m" 
+
 API_BATCH_SIZE = 50
+
 
 ################ Kafka Config ###################################
 TOPIC = 'yfinance-data'

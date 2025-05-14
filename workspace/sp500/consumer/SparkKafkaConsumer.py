@@ -36,7 +36,7 @@ class SparkKafkaConsumer:
             .format("kafka") \
             .option("kafka.bootstrap.servers", self.kafka_bootstrap_servers) \
             .option("subscribe", self.topic) \
-            .option("startingOffsets", "latest") \
+            .option("startingOffsets", "earliest") \
             .load()
 
         parsed_df = raw_df.selectExpr("CAST(value AS STRING)") \
